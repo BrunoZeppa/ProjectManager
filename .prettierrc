@@ -1,0 +1,6 @@
+{
+    "tablewidth": 4, 
+    "semi": true,
+    "printWidth": 80,
+    "singleQuote": false
+}
