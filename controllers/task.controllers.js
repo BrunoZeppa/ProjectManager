@@ -53,22 +53,14 @@ const createTask = async (req, res, next) => {
 const updateTask = async (req, res) => {
   try {
     const { task } = req;
-    const { limitDate, startDate, finishDate } = req.body;
+    const { finishDate } = req.body;
 
-    const diamicStatus = (limit, finish) => {
-      if (finish >= limit) {
-        return "late";
-      }
-      if (finish <= limit) {
-        return "completed";
-      }
-    };
-
-    await task.update({
-      startDate,
-      finishDate,
-      status: diamicStatus(limitDate, finishDate),
-    });
+    await task.update({ finishDate });
+    if (task.limitDate >= task.finishDate) {
+      await task.update({ status: "completed" });
+    } else if (task.limitDate < task.finishDate) {
+      await task.update({ status: "late" });
+    }
 
     res.status(200).json({
       status: "success",
